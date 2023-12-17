@@ -1,0 +1,23 @@
+---
+import { marked } from 'marked';
+export function getStaticPaths() {
+  return [
+    {params: {name: 'all'}},
+    {params: {name: 'inbox'}},
+    {params: {name: 'people'}},
+  ];
+}
+
+// Example: Fetch Markdown from a remote API
+// and render it to HTML, at runtime.
+// Using "marked" (https://github.com/markedjs/marked)
+const { name } = Astro.params;
+const response = await fetch(new URL(`/${name}.md`, 'https://tannal-glitch-me.glitch.me/'));
+const markdown = await response.text().catch();
+const content = marked.parse(markdown);
+
+---
+
+<article set:html={content} />
+
+<script src="https://cdn.jsdelivr.net/gh/zerodevx/zero-md@2/dist/zero-md.min.js" type="module"></script>
